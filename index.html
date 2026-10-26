@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trắc Nghiệm Thời Trang Nhanh (Fast Fashion)</title>
+    <style>
+      :root {
+        --bg-color: #5c6255;
+        --card-bg: #6b7263;
+        --text-color: #f4f1ea;
+        --heading-color: #ffffff;
+        --option-bg: #7b8273;
+        --option-hover: #8b9283;
+        --correct-bg: #4a7c59;
+        --correct-border: #81c784;
+        --wrong-bg: #8b4a4a;
+        --wrong-border: #e57373;
+        --explanation-bg: #4e5448;
+        --accent-color: #d4a373;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Segoe UI",
+          -apple-system,
+          BlinkMacSystemFont,
+          Roboto,
+          sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .quiz-container {
+        background-color: var(--card-bg);
+        width: 100%;
+        max-width: 800px;
+        border-radius: 16px;
+        padding: 35px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        padding-bottom: 15px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--heading-color);
+        margin-bottom: 8px;
+      }
+
+      .header p {
+        font-size: 14px;
+        color: var(--accent-color);
+        font-weight: 600;
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        height: 8px;
+        border-radius: 4px;
+        margin-bottom: 25px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--accent-color);
+        width: 0%;
+        transition: width 0.4s ease;
+      }
+
+      .question-box {
+        margin-bottom: 25px;
+      }
+
+      .question-number {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--accent-color);
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+
+      .question-text {
+        font-size: 19px;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--heading-color);
+      }
+
+      .options-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      @media (max-width: 600px) {
+        .options-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .option-btn {
+        background-color: var(--option-bg);
+        color: var(--text-color);
+        border: 2px solid transparent;
+        padding: 16px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      .option-btn:hover:not([disabled]) {
+        background-color: var(--option-hover);
+        transform: translateY(-2px);
+      }
+
+      .option-btn.correct {
+        background-color: var(--correct-bg) !important;
+        border-color: var(--correct-border) !important;
+        color: #ffffff !important;
+        font-weight: bold;
+      }
+
+      .option-btn.wrong {
+        background-color: var(--wrong-bg) !important;
+        border-color: var(--wrong-border) !important;
+        color: #ffffff !important;
+        opacity: 0.85;
+      }
+
+      .option-btn[disabled] {
+        cursor: default;
+      }
+
+      .explanation-box {
+        background-color: var(--explanation-bg);
+        border-left: 4px solid var(--accent-color);
+        padding: 18px 20px;
+        border-radius: 0 10px 10px 0;
+        margin-bottom: 25px;
+        display: none;
+        animation: fadeIn 0.4s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .explanation-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: var(--accent-color);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .explanation-text {
+        font-size: 14.5px;
+        line-height: 1.6;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .next-btn {
+        background-color: var(--accent-color);
+        color: #2c3028;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: none;
+      }
+
+      .next-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      .result-screen {
+        text-align: center;
+        padding: 20px 0;
+        display: none;
+      }
+
+      .result-score {
+        font-size: 48px;
+        font-weight: bold;
+        color: var(--accent-color);
+        margin: 15px 0;
+      }
+
+      .result-msg {
+        font-size: 18px;
+        margin-bottom: 25px;
+      }
+
+      .restart-btn {
+        background-color: var(--accent-color);
+        color: #2c3028;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .restart-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-container">
+      <div class="header">
+        <h1>Bộ Câu Hỏi Trắc Nghiệm</h1>
+        <p>Chủ đề: Fast Fashion — Mức độ: Dễ</p>
+      </div>
+
+      <div class="progress-bar-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div id="quiz-screen">
+        <div class="question-box">
+          <div class="question-number" id="q-number">Câu 1 / 6</div>
+          <div class="question-text" id="q-text">Đang tải câu hỏi...</div>
+        </div>
+
+        <div class="options-grid" id="options-grid">
+          <!-- Các nút đáp án sẽ tự động chèn vào đây -->
+        </div>
+
+        <div class="explanation-box" id="explanation-box">
+          <div class="explanation-title" id="status-title">
+            ✔ Đáp án chính xác!
+          </div>
+          <div class="explanation-text" id="explanation-text">
+            Lý do giải thích...
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+            Câu tiếp theo ➔
+          </button>
+        </div>
+      </div>
+
+      <div class="result-screen" id="result-screen">
+        <h2>Hoàn Thành Bài Trắc Nghiệm!</h2>
+        <div class="result-score" id="result-score">0 / 6</div>
+        <div class="result-msg" id="result-msg">
+          Bạn đã trả lời xuất sắc tất cả các câu hỏi!
+        </div>
+        <button class="restart-btn" onclick="restartQuiz()">
+          Làm lại bài trắc nghiệm
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const quizData = [
+        {
+          question:
+            'Mô hình "Thời trang nhanh" (Fast Fashion) được ví như mô hình sản xuất quần áo gì?',
+          options: [
+            'A. "Đo đo thủ công"',
+            'B. "Mì ăn liền"',
+            'C. "May đo cao cấp"',
+            'D. "Thủ công mỹ nghệ"',
+          ],
+          correctIndex: 1,
+          explanation:
+            'Slide 6: Fast Fashion được mô tả là mô hình sản xuất quần áo "mì ăn liền": Giá rẻ, bắt kịp xu hướng cực nhanh.',
+        },
+        {
+          question:
+            "Trong các đặc điểm cốt lõi của ngành Fast Fashion, chu kỳ sống của sản phẩm được so sánh tương tự với loại hàng hóa nào?",
+          options: [
+            "A. Hàng tiêu dùng nhanh (FMCG)",
+            "B. Bất động sản",
+            "C. Ô tô hạng sang",
+            "D. Thiết bị điện tử gia dụng cao cấp",
+          ],
+          correctIndex: 0,
+          explanation:
+            "Slide 8: Chu kỳ sống của sản phẩm cực ngắn. Quần áo không còn là tài sản dài hạn mà trở thành hàng tiêu dùng nhanh (FMCG).",
+        },
+        {
+          question:
+            'Thuật ngữ "Fast Fashion" chính thức ra đời vào năm nào khi tờ The New York Times mô tả việc Zara đưa quần áo từ bản vẽ lên kệ chỉ trong 15 ngày?',
+          options: ["A. Năm 1970", "B. Năm 1980", "C. Năm 1990", "D. Năm 2000"],
+          correctIndex: 2,
+          explanation:
+            'Slide 7: Thuật ngữ "Fast Fashion" chính thức ra đời năm 1990 khi tờ The New York Times mô tả việc Zara đưa quần áo từ bản vẽ lên kệ chỉ trong 15 ngày.',
+        },
+        {
+          question:
+            "Xu hướng thay đổi siêu nhanh (Ultra-Fast Fashion) hiện nay chịu sự thúc đẩy mạnh mẽ từ nền tảng nào?",
+          options: [
+            "A. Sàn diễn thời trang Paris và Milan",
+            "B. Mạng xã hội (TikTok, Instagram)",
+            "C. Các tạp chí thời trang giấy truyền thống",
+            "D. Các buổi triển lãm nghệ thuật cổ điển",
+          ],
+          correctIndex: 1,
+          explanation:
+            "Slide 9: Mạng xã hội (TikTok, Instagram) đã đẩy tốc độ ngành lên mức chóng mặt, làm bùng nổ xu hướng ngắn hạn từ KOLs.",
+        },
+        {
+          question:
+            'Vào thập niên nào, sự thay đổi tư duy tiêu dùng chuyển từ "mặc bền" sang "mặc đẹp và hợp mốt" diễn ra?',
+          options: [
+            "A. Thập niên 1940–1950",
+            "B. Thập niên 1960–1970",
+            "C. Thập niên 1980–1990",
+            "D. Thập niên 2000–2010",
+          ],
+          correctIndex: 1,
+          explanation:
+            'Slide 7: Thập niên 1960–1970 ghi nhận sự thay đổi tư duy tiêu dùng của giới trẻ từ "mặc bền" sang "mặc đẹp và hợp mốt".',
+        },
+        {
+          question:
+            "Các thế lực thương mại điện tử thế hệ mới (như Shein, Temu) vận hành hoàn toàn bằng công nghệ nào để có thể tung ra hàng ngàn mẫu mới mỗi ngày?",
+          options: [
+            "A. Thủ công truyền thống và sức lao động",
+            "B. AI và dữ liệu lớn (Big Data)",
+            "C. Máy may công nghiệp thủ công",
+            "D. Đấu giá trực tiếp tại cửa hàng vật lý",
+          ],
+          correctIndex: 1,
+          explanation:
+            "Slide 10: Các thế lực thương mại điện tử thế hệ mới (Shein, Temu) vận hành hoàn toàn bằng AI và dữ liệu lớn, có khả năng tung hàng ngàn mẫu mới mỗi ngày.",
+        },
+      ];
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+
+      const qNumberEl = document.getElementById("q-number");
+      const qTextEl = document.getElementById("q-text");
+      const optionsGridEl = document.getElementById("options-grid");
+      const explanationBoxEl = document.getElementById("explanation-box");
+      const statusTitleEl = document.getElementById("status-title");
+      const explanationTextEl = document.getElementById("explanation-text");
+      const nextBtnEl = document.getElementById("next-btn");
+      const progressBarEl = document.getElementById("progress-bar");
+      const quizScreenEl = document.getElementById("quiz-screen");
+      const resultScreenEl = document.getElementById("result-screen");
+      const resultScoreEl = document.getElementById("result-score");
+
+      function loadQuestion() {
+        const currentQ = quizData[currentQuestionIndex];
+        qNumberEl.textContent = `Câu ${currentQuestionIndex + 1} / ${quizData.length}`;
+        qTextEl.textContent = currentQ.question;
+
+        // Cập nhật thanh tiến trình
+        const progressPercent = (currentQuestionIndex / quizData.length) * 100;
+        progressBarEl.style.width = `${progressPercent}%`;
+
+        // Reset trạng thái hiển thị
+        optionsGridEl.innerHTML = "";
+        explanationBoxEl.style.display = "none";
+        nextBtnEl.style.display = "none";
+
+        // Tạo các nút đáp án
+        currentQ.options.forEach((optText, index) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.textContent = optText;
+          btn.onclick = () => selectOption(index);
+          optionsGridEl.appendChild(btn);
+        });
+      }
+
+      function selectOption(selectedIndex) {
+        const currentQ = quizData[currentQuestionIndex];
+        const optionButtons = optionsGridEl.querySelectorAll(".option-btn");
+
+        // Vô hiệu hóa tất cả các nút sau khi chọn
+        optionButtons.forEach((btn) => (btn.disabled = true));
+
+        if (selectedIndex === currentQ.correctIndex) {
+          score++;
+          optionButtons[selectedIndex].classList.add("correct");
+          statusTitleEl.textContent = "✔ CHÍNH XÁC!";
+          statusTitleEl.style.color = "#81C784";
+        } else {
+          optionButtons[selectedIndex].classList.add("wrong");
+          optionButtons[currentQ.correctIndex].classList.add("correct"); // Tự động tô sáng đáp án đúng
+          statusTitleEl.textContent = "✖ CHƯA CHÍNH XÁC!";
+          statusTitleEl.style.color = "#E57373";
+        }
+
+        // Hiển thị khung giải thích & Nút chuyển câu
+        explanationTextEl.textContent = currentQ.explanation;
+        explanationBoxEl.style.display = "block";
+        nextBtnEl.style.display = "block";
+      }
+
+      function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+          loadQuestion();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        progressBarEl.style.width = "100%";
+        quizScreenEl.style.display = "none";
+        resultScreenEl.style.display = "block";
+        resultScoreEl.textContent = `${score} / ${quizData.length}`;
+      }
+
+      function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        quizScreenEl.style.display = "block";
+        resultScreenEl.style.display = "none";
+        loadQuestion();
+      }
+
+      // Bắt đầu ứng dụng
+      loadQuestion();
+    </script>
+  </body>
+</html>
